@@ -72,9 +72,9 @@ generate_protein_report <- function(qc_result,
   
   # 格式化数值用于显示 (保留两位小数)
   txt_prot   <- format(val_prot, big.mark = ",")
-  txt_recall <- sprintf("%.2f", val_recall)
+  txt_recall <- sprintf("%.3f", val_recall)
   txt_snr    <- sprintf("%.2f", val_snr)
-  txt_rc     <- sprintf("%.2f", val_rc)
+  txt_rc     <- sprintf("%.3f", val_rc)
   
   # --- 4. 构建表格数据 ---
   # 定义列名
