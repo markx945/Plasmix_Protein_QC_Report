@@ -185,7 +185,10 @@ qc_cor <- function(expr_dt, meta_dt, output_dir = NULL, plot = FALSE, show_sampl
   mat <- as.matrix(expr_dt[, -1])
   rownames(mat) <- expr_dt[[1]]
   mat <- mat[, meta_dt$library] 
-  mat[is.na(mat)] <- 0
+  
+  # [修正 1] 删除这里的 mat[is.na(mat)] <- 0，保留 NA 状态！
+  # mat[is.na(mat)] <- 0
+  
   
   # --- 修改 2: RC 计算逻辑 (还原Log2 -> 算比值) ---
   
@@ -214,11 +217,24 @@ qc_cor <- function(expr_dt, meta_dt, output_dir = NULL, plot = FALSE, show_sampl
     dat_ref <- mat_linear[, cols_ref, drop=FALSE]
     dat_test <- mat_linear[, cols_test, drop=FALSE]
     
-    # 过滤掉 全0/全NA 的行
-    keep_rows <- (rowSums(dat_ref > 0, na.rm=TRUE) > 0) & (rowSums(dat_test > 0, na.rm=TRUE) > 0)
+    # [修正 2] 过滤逻辑升级：Reference 组必须有有效值
+    # 计算每行非 NA 的数量
+    count_ref <- rowSums(!is.na(dat_ref))
+    count_test <- rowSums(!is.na(dat_test))
     
-    dat_ref <- dat_ref[keep_rows, , drop=FALSE]
-    dat_test <- dat_test[keep_rows, , drop=FALSE]
+    # 规则：Ref 组至少有 1 个有效值，Test 组至少有 1 个有效值
+    # 如果 Reference 是全 NA，Ratio = Test / NaN = NaN，这种必须丢弃
+    keep_rows <- (count_ref > 0) & (count_test > 0)
+    
+    # dat_ref <- dat_ref[keep_rows, , drop=FALSE]
+    # dat_test <- dat_test[keep_rows, , drop=FALSE]
+    # 
+    # # 过滤掉 全0/全NA 的行
+    # keep_rows <- (rowSums(dat_ref > 0, na.rm=TRUE) > 0) & (rowSums(dat_test > 0, na.rm=TRUE) > 0)
+    # 
+    # dat_ref <- dat_ref[keep_rows, , drop=FALSE]
+    # dat_test <- dat_test[keep_rows, , drop=FALSE]
+    
     current_features <- rownames(dat_ref)
     
     # 与参考集 Feature 取交集
@@ -259,42 +275,42 @@ qc_cor <- function(expr_dt, meta_dt, output_dir = NULL, plot = FALSE, show_sampl
   
   merged <- merge(res_all, ref_dt, by="key")
   
-  # --- 升级版离群点检测 (Log-Space Outlier Detection) ---
-  # 1. 转换到 Log2 空间进行检测 (这样分布是对称的，IQR 更准确)
-  #    加极小值防止 log(0)
-  log2_vals <- log2(merged$logFC.Test + 1e-6)
-  
-  # 2. 计算 Log 空间的 IQR
-  Q1 <- quantile(log2_vals, 0.25, na.rm = TRUE)
-  Q3 <- quantile(log2_vals, 0.75, na.rm = TRUE)
-  IQR_val <- Q3 - Q1
-  
-  # 3. 设定 Log 空间的阈值
-  # 这里系数 1.5 是标准，如果想更严格可以设为 1.2
-  upper_log <- Q3 + 1.5 * IQR_val
-  lower_log <- Q1 - 1.5 * IQR_val
-  
-  # 4. 找出离群点
-  is_outlier <- (log2_vals > upper_log) | (log2_vals < lower_log)
-  
-  # *额外硬阈值*：Ratio > 100 或 < 0.01 无论如何都算离群 (生物学上极罕见)
-  is_extreme <- (merged$logFC.Test > 100) | (merged$logFC.Test < 0.01)
-  final_mask <- is_outlier | is_extreme
-  
-  n_outliers <- sum(final_mask, na.rm = TRUE)
-  
-  if (n_outliers > 0) {
-    message(sprintf("Detected %d outliers in RC calculation (Log-IQR method). Removing them.", n_outliers))
-    
-    # 打印前几个被剔除的极端值，方便用户 debug
-    removed_examples <- head(merged[final_mask, ], 3)
-    message("Top removed outliers:")
-    print(removed_examples[, c("Feature", "Sample.Pair", "logFC.Test")])
-    
-    merged_clean <- merged[!final_mask, ]
-  } else {
-    merged_clean <- merged
-  }
+  # # --- 升级版离群点检测 (Log-Space Outlier Detection) ---
+  # # 1. 转换到 Log2 空间进行检测 (这样分布是对称的，IQR 更准确)
+  # #    加极小值防止 log(0)
+  # log2_vals <- log2(merged$logFC.Test + 1e-6)
+  # 
+  # # 2. 计算 Log 空间的 IQR
+  # Q1 <- quantile(log2_vals, 0.25, na.rm = TRUE)
+  # Q3 <- quantile(log2_vals, 0.75, na.rm = TRUE)
+  # IQR_val <- Q3 - Q1
+  # 
+  # # 3. 设定 Log 空间的阈值
+  # # 这里系数 1.5 是标准，如果想更严格可以设为 1.2
+  # upper_log <- Q3 + 1.5 * IQR_val
+  # lower_log <- Q1 - 1.5 * IQR_val
+  # 
+  # # 4. 找出离群点
+  # is_outlier <- (log2_vals > upper_log) | (log2_vals < lower_log)
+  # 
+  # # *额外硬阈值*：Ratio > 100 或 < 0.01 无论如何都算离群 (生物学上极罕见)
+  # is_extreme <- (merged$logFC.Test > 100) | (merged$logFC.Test < 0.01)
+  # final_mask <- is_outlier | is_extreme
+  # 
+  # n_outliers <- sum(final_mask, na.rm = TRUE)
+  # 
+  # if (n_outliers > 0) {
+  #   message(sprintf("Detected %d outliers in RC calculation (Log-IQR method). Removing them.", n_outliers))
+  #   
+  #   # 打印前几个被剔除的极端值，方便用户 debug
+  #   removed_examples <- head(merged[final_mask, ], 3)
+  #   message("Top removed outliers:")
+  #   print(removed_examples[, c("Feature", "Sample.Pair", "logFC.Test")])
+  #   
+  #   merged_clean <- merged[!final_mask, ]
+  # } else {
+  #   merged_clean <- merged
+  # }
   # ----------------------------------------------------
   
   # 计算相关性 (Test Ratio vs Reference Ratio)
@@ -304,10 +320,35 @@ qc_cor <- function(expr_dt, meta_dt, output_dir = NULL, plot = FALSE, show_sampl
   # Plot
   p <- NULL
   if(plot) {
-    cols <- get_sample_colors(unique(merged$Sample.Pair))
+    # [修复] 安全的颜色映射逻辑，防止下标越界
+    unique_pairs <- unique(merged$Sample.Pair)
+    
+    # 1. 提取所有涉及的分子样本 (Test Samples)
+    numerators <- unique(sapply(strsplit(as.character(unique_pairs), "/"), `[`, 1))
+    
+    # 2. 获取这些样本的标准颜色
+    sample_cols_base <- get_sample_colors(numerators) # named vector
+    
+    # 3. 构建 Pair -> Color 的映射向量
+    pair_colors_vec <- c()
+    for(pair in unique_pairs) {
+      num <- strsplit(as.character(pair), "/")[[1]][1]
+      # 安全查找：如果 num 存在于 sample_cols_base 的名字中
+      if(num %in% names(sample_cols_base)) {
+        pair_colors_vec[pair] <- sample_cols_base[num]
+      } else {
+        pair_colors_vec[pair] <- "gray"
+      }
+    }
+    
     p <- ggplot(merged, aes(x = assigned_value, y = logFC.Test)) +
-      geom_point(aes(color = Sample.Pair), alpha = 0.6) +
+      geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray50") +
+      geom_point(aes(color = Sample.Pair), alpha = 0.6, size = 2) +
+      scale_color_manual(values = pair_colors_vec) +
       theme_few() +
+      coord_fixed(xlim = c(0, 5), ylim = c(0, 5)) +
+      scale_x_continuous(breaks = 0:5) +
+      scale_y_continuous(breaks = 0:5) +
       labs(title = paste0("RC = ", cor_val),
            x = "Reference Value (Ratio)",
            y = "Test Value (Ratio)")
