@@ -2,7 +2,7 @@
 % Please edit documentation in R/qc_metrics.R
 \name{qc_cor}
 \alias{qc_cor}
-\title{Calculating RC value; Plotting a scatterplot}
+\title{Calculating RC}
 \usage{
 qc_cor(
   expr_dt,
@@ -12,17 +12,6 @@ qc_cor(
   show_sample_pairs = TRUE
 )
 }
-\arguments{
-\item{expr_dt}{A expression table file (at peptide level)}
-
-\item{meta_dt}{A metadata file}
-
-\item{output_dir}{A directory of the output file(s)}
-
-\item{plot}{if True, a plot will be output.}
-
-\item{show_sample_pairs}{if True, samples in plot will be labeled.}
-}
 \description{
-Calculating RC value; Plotting a scatterplot
+Calculating RC
 }

@@ -2,29 +2,27 @@
 % Please edit documentation in R/report.R
 \name{generate_protein_report}
 \alias{generate_protein_report}
-\title{Generate Plasmix Proteomics report}
+\title{Generate Protein Quality Report (Chinese Version)}
 \usage{
 generate_protein_report(
   qc_result,
-  report_template,
+  report_template = NULL,
   report_dir = NULL,
-  report_name = NULL
+  report_name = NULL,
+  batch_name = NULL
 )
 }
 \arguments{
-\item{qc_result}{list}
+\item{qc_result}{list, the output from qc_conclusion()}
 
-\item{report_template}{character}
+\item{report_template}{character, path to a .docx file to use as style template (optional)}
 
-\item{report_dir}{character}
+\item{report_dir}{character, directory to save the report}
 
-\item{report_name}{character}
+\item{report_name}{character, filename of the report}
+
+\item{batch_name}{character, optional, manual batch name. If NULL, tries to infer from metadata.}
 }
 \description{
-Use calculated result to generate report
-}
-\examples{
-# 加载示例数据
-# 运行函数
-
+Generates a report following the ShenKang Plasmix template structure.
 }

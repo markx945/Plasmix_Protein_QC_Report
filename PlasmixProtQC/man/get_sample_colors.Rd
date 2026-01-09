@@ -2,16 +2,10 @@
 % Please edit documentation in R/qc_metrics.R
 \name{get_sample_colors}
 \alias{get_sample_colors}
-\title{Get color mapping for samples}
+\title{Get color mapping}
 \usage{
 get_sample_colors(samples)
 }
-\arguments{
-\item{samples}{Vector of sample names}
-}
-\value{
-Named vector of colors
-}
 \description{
-Get color mapping for samples
+Get color mapping
 }

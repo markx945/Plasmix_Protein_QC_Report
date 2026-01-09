@@ -2,15 +2,10 @@
 % Please edit documentation in R/qc_metrics.R
 \name{qc_recall}
 \alias{qc_recall}
-\title{Calculating Recall of nominal characteristics}
+\title{Recall}
 \usage{
 qc_recall(expr_dt, meta_dt)
 }
-\arguments{
-\item{expr_dt}{A expression table file (at peptide level)}
-
-\item{meta_dt}{A metadata file (to map library to sample type)}
-}
 \description{
-Calculating Recall of nominal characteristics
+Recall
 }

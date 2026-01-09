@@ -2,19 +2,10 @@
 % Please edit documentation in R/qc_metrics.R
 \name{qc_snr}
 \alias{qc_snr}
-\title{Calculating SNR value; Plotting a PCA panel}
+\title{Calculating SNR}
 \usage{
 qc_snr(expr_dt, meta_dt, output_dir = NULL, plot = TRUE)
 }
-\arguments{
-\item{expr_dt}{A expression profile (at protein level)}
-
-\item{meta_dt}{A metadata file}
-
-\item{output_dir}{A directory of the output file(s)}
-
-\item{plot}{if True, a plot will be output.}
-}
 \description{
-Calculating SNR value; Plotting a PCA panel
+Calculating SNR
 }
