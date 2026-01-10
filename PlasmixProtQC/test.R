@@ -2,6 +2,8 @@ devtools::load_all()
 
 devtools::document()
 
+usethis::use_readme_md()
+
 # 2. 定义文件路径
 # 请确保这两个文件在你的工作目录，或者填写绝对路径
 expr_file <- "./test_data/plasmix_somascan_test_expr.txt"
@@ -52,19 +54,19 @@ generate_protein_report(
 )
 
 
-# 1. 提取完整的结果表
-res_table <- qc_res$detail_results$cor_results$logfc
-
-# 2. 筛选 logFC.Test (实际是 Ratio) 大于 100 的行
-# 这里的列名虽然叫 logFC.Test，但根据我们修改后的逻辑，里面存的是 Linear Ratio
-outliers_100 <- res_table[res_table$logFC.Test > 100, ]
-
-# 3. 按数值从大到小排序，查看前几行
-outliers_sorted <- outliers_100[order(outliers_100$logFC.Test, decreasing = TRUE), ]
-
-print(">>> Ratio > 100 的数据统计：")
-print(nrow(outliers_sorted)) # 看看有多少个
-
-print(">>> Ratio 最大的前 10 个：")
-print(head(outliers_sorted, 10))
+# # 1. 提取完整的结果表
+# res_table <- qc_res$detail_results$cor_results$logfc
+# 
+# # 2. 筛选 logFC.Test (实际是 Ratio) 大于 100 的行
+# # 这里的列名虽然叫 logFC.Test，但根据我们修改后的逻辑，里面存的是 Linear Ratio
+# outliers_100 <- res_table[res_table$logFC.Test > 100, ]
+# 
+# # 3. 按数值从大到小排序，查看前几行
+# outliers_sorted <- outliers_100[order(outliers_100$logFC.Test, decreasing = TRUE), ]
+# 
+# print(">>> Ratio > 100 的数据统计：")
+# print(nrow(outliers_sorted)) # 看看有多少个
+# 
+# print(">>> Ratio 最大的前 10 个：")
+# print(head(outliers_sorted, 10))
 
