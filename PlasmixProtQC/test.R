@@ -4,6 +4,15 @@ devtools::document()
 
 usethis::use_readme_md()
 
+
+
+remotes::install_github('https://github.com/markx945/Plasmix_Protein_QC_Report',subdir = 'PlasmixProtQC')
+
+library(PlasmixProtQC)
+
+
+
+
 # 2. 定义文件路径
 # 请确保这两个文件在你的工作目录，或者填写绝对路径
 expr_file <- "./test_data/plasmix_somascan_test_expr.txt"
@@ -27,7 +36,7 @@ tryCatch({
   qc_res <- qc_conclusion(
     exp_path = expr_file,
     meta_path = meta_file,
-    output_dir = out_dir
+    output_dir = output_dir
   )
   
   # 4. 查看结果
