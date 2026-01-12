@@ -4,6 +4,7 @@
 #' @import stats
 #' @importFrom psych corr.test
 #' @importFrom reshape2 melt
+#' @importFrom ggplot2 geom_abline
 #' @export
 qc_info <- function(expr_dt, meta_dt) {
   # Load data
@@ -349,9 +350,9 @@ qc_cor <- function(expr_dt, meta_dt, output_dir = NULL, plot = FALSE, show_sampl
       coord_fixed(xlim = c(0, 5), ylim = c(0, 5)) +
       scale_x_continuous(breaks = 0:5) +
       scale_y_continuous(breaks = 0:5) +
-      labs(title = paste0("RC = ", cor_val),
-           x = "Reference Value (Ratio)",
-           y = "Test Value (Ratio)")
+      labs(title = paste0("PCC = ", cor_val),
+           x = "Reference Value",
+           y = "Test Value")
   }
   
   return(list(COR = cor_val, cor_plot = p, logfc = merged))
