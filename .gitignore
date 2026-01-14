@@ -50,3 +50,4 @@ rsconnect/
 
 output/
 test_*.csv
+.DS_Store
