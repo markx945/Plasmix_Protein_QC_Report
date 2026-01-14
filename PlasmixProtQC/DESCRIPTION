@@ -1,14 +1,23 @@
 Package: PlasmixProtQC
-Title: What the Package Does (One Line, Title Case)
+Title: The package protqc output Quality Control(QC) results of proteomics data for Quartet Project
 Version: 1.0.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Yanming", "Xie", email = "yanming.xie@fudan.edu.cn", role = c("aut", "cre"))
+Depends: R (>= 3.5)
+Imports:
+    data.table,
+    dplyr,
+    flextable,
+    ggplot2,
+    ggthemes,
+    officer,
+    psych,
+    reshape2,
+    stats,
+    utils,
+Description: The package protqc output Quality Control(QC) results of proteomics data for Quartet Project. The QC pipeline starts from the expression profiles at peptide/protein levels, and enables to calculate 6 metrics. A Total score is the geometric mean of the linearly normalized values of these metrics..
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Depends: 
-    R (>= 3.5)
 LazyData: true
