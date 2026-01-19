@@ -23,8 +23,8 @@ expr_file <- "./test_data/plasmix_olink_test_expr.txt"
 meta_file <- "./test_data/plasmix_olink_test_meta.txt"
 
 # DIA
-expr_file <- "./test_data/plasmix_dia_test_expr.txt"
-meta_file <- "./test_data/plasmix_dia_test_meta.txt"
+expr_file <- "./test_data/plasmix_dia_test_expr.csv"
+meta_file <- "./test_data/plasmix_dia_test_meta.csv"
 
 template <- system.file("extdata", "Plasmix_template.docx", package = "PlasmixProtQC")
 
