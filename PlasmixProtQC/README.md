@@ -2,6 +2,7 @@
 
 **PlasmixProtQC** 是一个用于评估血浆蛋白组学数据质量的 R 包。它专为 Plasmix 参考物质设计，支持 **SomaScan**、**Olink** 和 **DIA** 等多种主流检测平台。通过计算关键质量指标（如 SNR、Recall、RC），并生成可视化的 Word 报告，帮助用户快速判断批次数据的可靠性。
 
+
 ## 功能特性
 
 * **多平台支持**：自动适配 SomaScan、Olink 和 DIA 数据的特性（如 PCA 缩放逻辑）。
@@ -11,6 +12,7 @@
 * **Recall (标称特性召回率)**：评估检测的覆盖深度。
 * **SNR (信噪比)**：评估区分不同生物样本组的能力。
 * **RC (相对相关性)**：基于比值（Ratio-based）评估定量准确性，与内置黄金标准进行比对。
+
 
 ## 安装
 
@@ -22,10 +24,6 @@ install.packages("devtools")
 
 # 加载本地包 (开发模式)
 devtools::load_all()
-
-# 或者从源码安装 (发布后)
-# devtools::install_github("YourName/PlasmixProtQC")
-
 ```
 
 ## 数据准备
@@ -47,7 +45,6 @@ devtools::load_all()
 * `platform`: 检测平台名称，必须准确填写为 **`SomaScan`**, **`Olink`** 或 **`DIA`** (这将决定参考数据集的选择和计算逻辑)。
 
 
-
 ## 快速开始
 
 以下示例展示了如何对 SomaScan、Olink 或 DIA 数据进行质控分析并生成报告。
@@ -58,21 +55,19 @@ devtools::load_all()
 library(PlasmixProtQC)
 
 # 定义输出目录
-output_dir <- './test_output/'
-if(!dir.exists(output_dir)) dir.create(output_dir)
+output_dir <- './output/'
 
 # --- 场景 A: SomaScan 数据 ---
-expr_file <- "./test_data/plasmix_somascan_test_expr.txt"
-meta_file <- "./test_data/plasmix_somascan_test_meta.txt"
+expr_file <- system.file("extdata", "plasmix_somascan_test_expr.csv", package = "PlasmixProtQC")
+meta_file <- system.file("extdata", "plasmix_somascan_test_meta.csv", package = "PlasmixProtQC")
 
 # --- 场景 B: Olink 数据 ---
-# expr_file <- "./test_data/plasmix_olink_test_expr.txt"
-# meta_file <- "./test_data/plasmix_olink_test_meta.txt"
+# expr_file <- system.file("extdata", "plasmix_olink_test_expr.csv", package = "PlasmixProtQC")
+# meta_file <- system.file("extdata", "plasmix_olink_test_meta.csv", package = "PlasmixProtQC")
 
 # --- 场景 C: DIA 数据 ---
-# expr_file <- "./test_data/plasmix_dia_test_expr.txt"
-# meta_file <- "./test_data/plasmix_dia_test_meta.txt"
-
+# expr_file <- system.file("extdata", "plasmix_dia_test_expr.csv", package = "PlasmixProtQC")
+# meta_file <- system.file("extdata", "plasmix_dia_test_meta.csv", package = "PlasmixProtQC")
 ```
 
 ### 第二步：运行质控分析
@@ -95,7 +90,6 @@ print(qc_res$conclusion)
 # 在 RStudio 中预览关键图表 (可选)
 # print(qc_res$snr_plot)  # 查看 SNR PCA 图
 # print(qc_res$cor_plot)  # 查看 RC 相关性散点图
-
 ```
 
 ### 第三步：生成 Word 报告
@@ -114,8 +108,8 @@ generate_protein_report(
   report_name = "Plasmix_QC_Report.docx", # 输出文件名
   batch_name = "20260108测试批次"   # (可选) 指定报告中显示的批次名称
 )
-
 ```
+
 
 ## 输出结果说明
 
@@ -127,7 +121,6 @@ generate_protein_report(
 * **摘要与结论**：Pass / Fail 判定。
 * **指标详情**：蛋白鉴定数、Recall、SNR、RC 的具体数值。
 * **可视化图表**：PCA 散点图和 RC 回归图。
-
 
 
 ## 常见问题
