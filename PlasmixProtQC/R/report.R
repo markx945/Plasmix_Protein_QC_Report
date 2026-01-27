@@ -122,7 +122,6 @@ generate_protein_report <- function(qc_result,
     txt_rc <- sprintf("%.3f", val_rc)
     if (val_rc < 0.80) {
       # txt_rc <- paste0(txt_rc, " ↓")
-      # txt_rc <- paste0(txt_rc, " ↓")
       pass_rc <- FALSE
     } else {
       pass_rc <- TRUE
@@ -144,10 +143,10 @@ generate_protein_report <- function(qc_result,
   # --- 4. 构建表格数据 ---
   # 定义列名
   cols <- c("样本组", "蛋白鉴定数", "标称特性灵敏度", "信噪比", "Pearson相关系数", "是否通过")
-  
+
   # 第一行：推荐标准
   row_std <- c("推荐质量标准", "≥1,000", "≥0.90", "≥5", "≥0.80", "-")
-  
+
   # 第二行：实际数据
   row_dat <- c(batch_name, txt_prot, txt_recall, txt_snr, txt_rc, overall_quality)
 
@@ -172,12 +171,11 @@ generate_protein_report <- function(qc_result,
     color(i = 2, j = 3, color = ifelse(grepl("↓", txt_recall), "red", "black")) %>%
     color(i = 2, j = 4, color = ifelse(grepl("↓", txt_snr), "red", "black")) %>%
     # color(i = 2, j = 5, color = ifelse(grepl("↓", txt_rc), "red", "black")) %>%
-    # color(i = 2, j = 5, color = ifelse(grepl("↓", txt_rc), "red", "black")) %>%
     # ----------------------------------------------------
     # 最后一列整体质量颜色 (Yes=绿, No=红)
     # 根据结果给"整体质量"上色
     color(i = 2, j = 6, color = ifelse(overall_quality == "Yes", "black", "red"))
-  
+
   # --- 5. 文档文本内容 (来自提供的模板) ---
   txt_summary <- "本报告基于多项组学关键质量控制指标，总结了 Plasmix血浆参考物质所生成数据的质量情况。质量控制流程从用户输入血浆蛋白组表达矩阵开始，分别计算外部质控品的蛋白鉴定数（Number of identified proteins）、标称特性灵敏度 (Recall of nominal characteristics)、 信噪比 (Signal-to-Noise Ratio, SNR)、与参考数据集的相对相关性 (Relative Correlation with Reference Datasets, RC)及整体质量判断。"
 
