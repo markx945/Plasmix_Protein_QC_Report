@@ -10,7 +10,11 @@ remotes::install_github('https://github.com/markx945/Plasmix_Protein_QC_Report',
 
 library(PlasmixProtQC)
 
+## testfile
+expr_file <- "./test_data/Merged_20260224_Expression_Matrix.csv"
+meta_file <- "./test_data/Merged_20260224_Metadata.csv"
 
+t1 <- fread(expr_file)
 
 
 # 2. 定义文件路径
@@ -25,6 +29,9 @@ meta_file <- "./test_data/plasmix_olink_test_meta.txt"
 # DIA
 expr_file <- "./test_data/plasmix_dia_test_expr.csv"
 meta_file <- "./test_data/plasmix_dia_test_meta.csv"
+
+fread(expr_file)
+
 
 template <- system.file("extdata", "Plasmix_template.docx", package = "PlasmixProtQC")
 

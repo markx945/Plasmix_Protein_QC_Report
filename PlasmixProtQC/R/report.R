@@ -132,14 +132,14 @@ generate_protein_report <- function(qc_result,
   # 3.5 整体判定
   # 逻辑: Protein, Recall, SNR 必须通过 (RC 可选或根据需求加入)
   # 原代码逻辑: is_all_pass <- pass_prot && pass_recall && pass_snr
-  is_all_pass <- pass_prot && pass_recall && pass_snr
+  is_all_pass <- pass_prot && pass_snr
   overall_quality <- ifelse(is_all_pass, "Yes", "No")
   
   # # 格式化数值用于显示 (保留两位小数)
-  # txt_prot   <- format(val_prot, big.mark = ",")
-  # txt_recall <- sprintf("%.3f", val_recall)
-  # txt_snr    <- sprintf("%.2f", val_snr)
-  # txt_rc     <- sprintf("%.3f", val_rc)
+  txt_prot   <- format(val_prot, big.mark = ",")
+  txt_recall <- sprintf("%.3f", val_recall)
+  txt_snr    <- sprintf("%.2f", val_snr)
+  txt_rc     <- sprintf("%.3f", val_rc)
   
   # --- 4. 构建表格数据 ---
   # 定义列名
@@ -169,7 +169,7 @@ generate_protein_report <- function(qc_result,
     bold(i = 2) %>%
     # --- [新增修改] 针对各个指标列：如果包含"↓"则标红 ---
     color(i = 2, j = 2, color = ifelse(grepl("↓", txt_prot), "red", "black")) %>%
-    color(i = 2, j = 3, color = ifelse(grepl("↓", txt_recall), "red", "black")) %>%
+    # color(i = 2, j = 3, color = ifelse(grepl("↓", txt_recall), "red", "black")) %>%
     color(i = 2, j = 4, color = ifelse(grepl("↓", txt_snr), "red", "black")) %>%
     # color(i = 2, j = 5, color = ifelse(grepl("↓", txt_rc), "red", "black")) %>%
     # ----------------------------------------------------
