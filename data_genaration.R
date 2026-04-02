@@ -40,4 +40,4 @@ reference_dataset <- raw_quant %>%
 # 这会将数据保存到 data/ 文件夹下，分别名为 reference_dataset.rda 和 reference_dataset_quali.rda
 usethis::use_data(reference_dataset_quali, reference_dataset, overwrite = TRUE)
 
-message("数据集已生成并保存到 data/ 目录。")
+message("数据集已生成并保存到 data/ 目录")
